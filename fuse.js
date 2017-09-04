@@ -2,6 +2,8 @@ const {
     FuseBox,
     SVGPlugin,
     CSSPlugin,
+    CSSModules,
+    PostCSS,
     BabelPlugin,
     QuantumPlugin,
     WebIndexPlugin,
@@ -13,14 +15,18 @@ let fuse, app, vendor, isProduction;
 Sparky.task("config", () => {
     fuse = new FuseBox({
         homeDir: "src/",
-        sourceMaps: !isProduction,
+        sourceMaps: false, // !isProduction,
         hash: isProduction,
         output: "dist/$name.js",
         useTypescriptCompiler: true,
         experimentalFeatures: true,
+        alias: {
+            styles: '~/styles',
+            images: '~/images'
+        },
         plugins: [
             SVGPlugin(),
-            CSSPlugin(),
+            [CSSModules({useDefault: false}), PostCSS([require('postcss-cssnext')]), CSSPlugin()],
             WebIndexPlugin({
                 template: "src/index.html"
             }),
