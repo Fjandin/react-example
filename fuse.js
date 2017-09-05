@@ -15,7 +15,7 @@ let fuse, app, vendor, isProduction;
 Sparky.task("config", () => {
     fuse = new FuseBox({
         homeDir: "src/",
-        sourceMaps: false, // !isProduction,
+        sourceMaps: !isProduction,
         hash: isProduction,
         output: "dist/$name.js",
         useTypescriptCompiler: true,
@@ -26,7 +26,11 @@ Sparky.task("config", () => {
         },
         plugins: [
             SVGPlugin(),
-            [CSSModules({useDefault: false}), PostCSS([require('postcss-cssnext')]), CSSPlugin()],
+            [
+                PostCSS([require('postcss-cssnext')]),
+                CSSModules({useDefault: false}),
+                CSSPlugin()
+            ],
             WebIndexPlugin({
                 template: "src/index.html"
             }),
